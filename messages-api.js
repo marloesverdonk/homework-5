@@ -1,21 +1,21 @@
 const express = require('express')
 const port = 3000
 const bodyParser = require('body-parser')
-
 const app = express()
-app.use(bodyParser.json())
 
 let numberOfRequests = 0
-
-app.use((req, res, next) => {
+const numberOfRequestsMiddleware = (req, res, next) => {
   numberOfRequests++
   numberOfRequests >= 6 ?
     res.status(429).send({
       "message": "Too many Requests"
     })
     : next()
-})
+}
 
+app.use(bodyParser.json())
+app.use(numberOfRequestsMiddleware)
+  
 app.post('/messages', (req, res) => {
   console.log(req.body.text)
   req.body.text && req.body.text !== "" ?
