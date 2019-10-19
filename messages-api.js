@@ -13,18 +13,17 @@ const numberOfRequestsMiddleware = (req, res, next) => {
     : next()
 }
 
-app.use(bodyParser.json())
-app.use(numberOfRequestsMiddleware)
-  
-app.post('/messages', (req, res) => {
-  console.log(req.body.text)
-  req.body.text && req.body.text !== "" ?
-    res.send({
-      "message": "Message received loud and clear"
-    })
-    : res.status(400).send({
-      "message": "Bad request"
-    })
-})
-
-app.listen(port, () => console.log(`listening on port ${port}`))
+app
+  .use(bodyParser.json())
+  .use(numberOfRequestsMiddleware)
+  .post('/messages', (req, res) => {
+    console.log(req.body.text)
+    req.body.text && req.body.text !== "" ?
+      res.send({
+        "message": "Message received loud and clear"
+      })
+      : res.status(400).send({
+        "message": "Bad request"
+      })
+  })
+  .listen(port, () => console.log(`listening on port ${port}`))
